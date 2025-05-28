@@ -41,7 +41,7 @@ public/
  ├─ utils.js          # helpers: greatCircle(), lerpColor(), etc.
  ├─ sample.json       # 1‑frame offline data blob
  └─ assets/
-     └─ plane.png     # 64×64 alpha sprite
+    └─ plane.svg     # simple vector icon
 README.md
 LICENSE
 ```
