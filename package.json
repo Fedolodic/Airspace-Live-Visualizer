@@ -1,0 +1,9 @@
+{
+  "name": "airspace-live-visualizer",
+  "version": "0.0.0",
+  "description": "Airspace Live Visualizer",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"No test specified\" && exit 0"
+  }
+}
