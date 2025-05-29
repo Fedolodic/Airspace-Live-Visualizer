@@ -50,15 +50,25 @@ LICENSE
 
 ## 🚀 Quick Start
 
-1. **Clone & serve statically** (no build step)
+1. **Clone & serve the `public/` folder** (no build step)
 
    ```bash
    git clone https://github.com/<your‑user>/airspace-live-visualizer.git
    cd airspace-live-visualizer
-   npx serve .       # or: python -m http.server 8000
+   # optional: export OPENSKY_USERNAME=foo OPENSKY_PASSWORD=bar
+   npx serve public -l 8000   # or: python -m http.server 8000 -d public
    ```
 
 2. Open **[http://localhost:8000](http://localhost:8000)** in your browser → flights should animate within \~5 s.
+
+---
+
+## 🎮 Controls & Offline Mode
+
+- Use the panel in the top‑right to toggle **Live** polling, adjust the
+  **Min/Max Alt** filters, and change **Point Size**.
+- If the OpenSky API cannot be reached the app automatically loads
+  `sample.json` and shows an "Offline demo" banner.
 
 ---
 
@@ -68,10 +78,12 @@ LICENSE
 | ------------------ | -------- | --------------------------------------------- |
 | `OPENSKY_USERNAME` | Optional | Auth for higher rate limits (OpenSky account) |
 | `OPENSKY_PASSWORD` | Optional | 〃                                             |
-| `MAPBOX_TOKEN`     | Optional | If you swap globe → Mapbox basemap later      |
-
-Add them as **GitHub Secrets** to keep CI safe:
-`Settings → Secrets → Actions → New repository secret`.
+| `MAPBOX_TOKEN`     | Optional | If you swap globe → Mapbox basemap later |
+|
+Set `OPENSKY_USERNAME` and `OPENSKY_PASSWORD` in your environment before
+launching the static server if you have an OpenSky account. You can also
+store them as **GitHub Secrets** to keep CI safe:
+`Settings → Secrets → Actions → New repository secret`.
 
 ---
 
