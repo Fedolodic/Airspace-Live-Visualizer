@@ -1,6 +1,7 @@
 // Data fetching and polling utilities for OpenSky API
-
+/** OpenSky REST endpoint returning current flight states. */
 const API_URL = 'https://opensky-network.org/api/states/all';
+/** Local fallback data when live fetching fails. */
 const SAMPLE_URL = 'sample.json';
 
 let callbacks = [];
@@ -11,6 +12,7 @@ let usingSample = false;
 /**
  * Register a callback to receive flight data.
  * @param {(data:Array, usingSample:boolean) => void} cb
+ * @returns {void}
  */
 export function onData(cb) {
   if (typeof cb === 'function') {
@@ -18,6 +20,12 @@ export function onData(cb) {
   }
 }
 
+/**
+ * Invokes all registered callbacks with the latest flight data.
+ *
+ * @param {Array<Array>} data Parsed OpenSky `states` rows.
+ * @returns {void}
+ */
 function notify(data) {
   for (const cb of callbacks) {
     try {
@@ -28,6 +36,12 @@ function notify(data) {
   }
 }
 
+/**
+ * Fetches flight states from OpenSky and notifies listeners.
+ * Falls back to `sample.json` on network errors.
+ *
+ * @returns {Promise<void>} Resolves after callbacks are executed.
+ */
 async function fetchData() {
   if (document.hidden) return;
 
@@ -57,6 +71,12 @@ async function fetchData() {
   }
 }
 
+/**
+ * Starts periodic polling of flight data.
+ *
+ * @param {number} [interval=10000] Polling interval in milliseconds.
+ * @returns {void}
+ */
 export function start(interval = 10000) {
   pollInterval = interval;
   stop();
@@ -64,6 +84,11 @@ export function start(interval = 10000) {
   intervalId = setInterval(fetchData, pollInterval);
 }
 
+/**
+ * Halts the polling timer if active.
+ *
+ * @returns {void}
+ */
 export function stop() {
   if (intervalId) {
     clearInterval(intervalId);

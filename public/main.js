@@ -50,6 +50,10 @@ setAltitudeFilter(params.altitudeMin, params.altitudeMax);
 setPointSize(params.pointSize);
 start();
 
+/**
+ * Animation loop driving Three.js rendering.
+ * @returns {void}
+ */
 function renderLoop() {
   requestAnimationFrame(renderLoop);
   render();

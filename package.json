@@ -4,6 +4,7 @@
   "description": "Airspace Live Visualizer",
   "type": "module",
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "docs": "jsdoc -c jsdoc.json"
   }
 }

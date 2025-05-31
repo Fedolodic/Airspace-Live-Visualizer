@@ -32,6 +32,7 @@ let prevPositions = new Map();
  * Sets up camera, lights and a basic Earth sphere.
  *
  * @param {HTMLCanvasElement} canvas Rendering target.
+ * @returns {void}
  */
 export function initGlobe(canvas) {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -103,6 +104,7 @@ export function initGlobe(canvas) {
  * Sets the visual thickness of flight paths.
  *
  * @param {number} size Tube radius in scene units.
+ * @returns {void}
  */
 export function setPointSize(size) {
   pointSize = size;
@@ -113,6 +115,7 @@ export function setPointSize(size) {
  *
  * @param {number} min Minimum altitude.
  * @param {number} max Maximum altitude.
+ * @returns {void}
  */
 export function setAltitudeFilter(min, max) {
   altitudeRange[0] = min;
@@ -123,6 +126,7 @@ export function setAltitudeFilter(min, max) {
  * Builds / updates meshes representing the provided flights.
  *
  * @param {Array<Array>} flights Raw OpenSky `states` arrays.
+ * @returns {void}
  */
 export function updateFlights(flights) {
   // clear previous geometry
@@ -195,6 +199,8 @@ export function updateFlights(flights) {
 
 /**
  * Renders the current scene.
+ *
+ * @returns {void}
  */
 export function render() {
   if (planeMesh) {
