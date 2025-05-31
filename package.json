@@ -4,6 +4,6 @@
   "description": "Airspace Live Visualizer",
   "type": "module",
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "node --test"
   }
 }
