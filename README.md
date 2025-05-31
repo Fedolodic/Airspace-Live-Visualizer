@@ -24,6 +24,7 @@ A real‑time, interactive **3‑D globe** that plots commercial flights fetched
 * **three.js ^0.165** – rendering, ray‑casting for tooltips
 * **D3 v7** – `geoInterpolate`, colour scales, utilities
 * **dat.GUI** – lightweight UI tweak pane
+* **Tippy.js** – accessible, animated tooltips
 
 > *👉 Feel free to swap in Vite/React/Deck.gl if you want hot‑reload or a component model; see Roadmap.*
 
@@ -107,7 +108,7 @@ pnpm run test        # jest
 ## 📈 Roadmap
 
 * [ ] Swap static ES‑modules → **Vite** for faster HMR
-* [ ] Tooltip overhaul with **Tippy.js**
+* [x] Tooltip overhaul with **Tippy.js**
 * [ ] **CesiumJS** globe option for terrain & lighting
 * [ ] Cache‐aware worker thread for data parsing
 * [ ] Unit tests for utils (great‑circle, colour scale)

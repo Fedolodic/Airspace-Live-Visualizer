@@ -3,6 +3,7 @@
 
 import * as THREE from 'three';
 import * as d3 from 'd3';
+import tippy from 'tippy.js';
 import { EARTH_RADIUS, latLonAltToVector3, interpolateGreatCircle } from './utils.js';
 
 // Constants
@@ -19,6 +20,7 @@ let earth;
 let arcGroup;
 let planeMesh;
 let tooltip;
+let tooltipTarget;
 let pointer = new THREE.Vector2();
 let raycaster = new THREE.Raycaster();
 
@@ -56,37 +58,41 @@ export function initGlobe(canvas) {
   arcGroup = new THREE.Group();
   scene.add(arcGroup);
 
-  // Tooltip element
-  tooltip = document.createElement('div');
-  tooltip.style.position = 'absolute';
-  tooltip.style.pointerEvents = 'none';
-  tooltip.style.padding = '2px 4px';
-  tooltip.style.background = 'rgba(0,0,0,0.7)';
-  tooltip.style.color = '#fff';
-  tooltip.style.fontSize = '12px';
-  tooltip.style.borderRadius = '2px';
-  tooltip.style.display = 'none';
-  canvas.parentElement.appendChild(tooltip);
+  // Tooltip anchor for Tippy.js
+  tooltipTarget = document.createElement('div');
+  tooltipTarget.style.position = 'fixed';
+  tooltipTarget.style.top = '0';
+  tooltipTarget.style.left = '0';
+  tooltipTarget.style.width = '0';
+  tooltipTarget.style.height = '0';
+  tooltipTarget.style.pointerEvents = 'none';
+  document.body.appendChild(tooltipTarget);
+  tooltip = tippy(tooltipTarget, {
+    trigger: 'manual',
+    hideOnClick: false,
+    delay: [0, 150]
+  });
 
   canvas.addEventListener('pointermove', event => {
     const rect = canvas.getBoundingClientRect();
     pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     raycaster.setFromCamera(pointer, camera);
+    tooltipTarget.style.transform = `translate(${event.clientX + 5}px, ${event.clientY + 5}px)`;
 
     if (planeMesh) {
       const intersects = raycaster.intersectObject(planeMesh);
       if (intersects.length > 0) {
         const idx = intersects[0].instanceId;
         if (flightInfos[idx]) {
-          tooltip.textContent = flightInfos[idx].callsign || flightInfos[idx].icao24;
-          tooltip.style.left = `${event.clientX + 5}px`;
-          tooltip.style.top = `${event.clientY + 5}px`;
-          tooltip.style.display = 'block';
+          tooltip.setContent(flightInfos[idx].callsign || flightInfos[idx].icao24);
+          tooltip.show();
         }
       } else {
-        tooltip.style.display = 'none';
+        tooltip.hide();
       }
+    } else {
+      tooltip.hide();
     }
   });
 
