@@ -1,0 +1,8 @@
+{
+  "title": "Visualizador de Tráfico Aéreo",
+  "offlineBanner": "Demo sin conexión – usando datos de muestra",
+  "live": "En vivo",
+  "pointSize": "Tamaño de puntos",
+  "minAlt": "Alt Min",
+  "maxAlt": "Alt Max"
+}

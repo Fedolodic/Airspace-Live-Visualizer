@@ -1,0 +1,8 @@
+{
+  "title": "Airspace Live Visualizer",
+  "offlineBanner": "Offline demo – using sample data",
+  "live": "Live",
+  "pointSize": "Point Size",
+  "minAlt": "Min Alt",
+  "maxAlt": "Max Alt"
+}
