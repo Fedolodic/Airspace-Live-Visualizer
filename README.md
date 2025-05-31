@@ -25,6 +25,10 @@ A real‑time, interactive **3‑D globe** that plots commercial flights fetched
 * **D3 v7** – `geoInterpolate`, colour scales, utilities
 * **dat.GUI** – lightweight UI tweak pane
 
+## 🌐 Browser Requirements
+
+This project runs directly in modern browsers using native ES modules and WebGL. We regularly test with the latest Chrome, Firefox and Safari releases. Browsers that lack ES module or WebGL 2 support (for example Internet Explorer) are not supported. If compatibility with older browsers is required, introduce a Babel build step to transpile the code to ES5.
+
 > *👉 Feel free to swap in Vite/React/Deck.gl if you want hot‑reload or a component model; see Roadmap.*
 
 ---
