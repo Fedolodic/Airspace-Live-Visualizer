@@ -60,6 +60,7 @@ LICENSE
    ```
 
 2. Open **[http://localhost:8000](http://localhost:8000)** in your browser → flights should animate within \~5 s.
+  Append `?cesium` to the URL to use the CesiumJS engine.
 
 ---
 
