@@ -5,7 +5,8 @@ Currently it contains `plane.svg` used as the airplane marker.
 
 ## Demo
 Serve this folder with a static server and open `index.html` to
-preview the asset.
+preview the asset. The parent demo at `../index.html` also embeds
+this image so you can see it in context.
 
 ---
 Author: David Martinez
