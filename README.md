@@ -85,6 +85,19 @@ launching the static server if you have an OpenSky account. You can also
 store them as **GitHub Secrets** to keep CI safe:
 `Settings → Secrets → Actions → New repository secret`.
 
+### Credential Security
+
+- **Never commit your credentials**. The `.gitignore` already excludes
+  `.env` files so you can keep `OPENSKY_USERNAME` and
+  `OPENSKY_PASSWORD` locally without risk.
+- **Use a `.env` file for local development** and load it with a tool
+  like `dotenv` if you migrate to a Node backend.
+- **Store secrets in GitHub** under **Settings → Secrets** when using
+  Actions or any CI workflow.
+- **Avoid logging sensitive values**. Check that no
+  `console.log()` or build script prints your OpenSky username or
+  password to stdout or CI logs.
+
 ---
 
 ## 🧪 Development Workflow
