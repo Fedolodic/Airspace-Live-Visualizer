@@ -4,6 +4,10 @@
   "description": "Airspace Live Visualizer",
   "type": "module",
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "release": "standard-version"
+  },
+  "devDependencies": {
+    "standard-version": "^9.5.0"
   }
 }

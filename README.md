@@ -115,6 +115,10 @@ pnpm run test        # jest
 
 Contributions & PRs welcome!  Please open an issue first to discuss major changes.
 
+## Release Management
+Run `npm run release` to generate a changelog, bump the version, and create a Git tag.
+
+
 ---
 
 ## 📜 License
