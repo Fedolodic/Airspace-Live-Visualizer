@@ -1,5 +1,5 @@
 import { initGlobe, updateFlights, setPointSize, setAltitudeFilter, render } from './globe.js';
-import { start, stop, onData } from './api.js';
+import { start, stop, onData, setPollInterval, getPollInterval } from './api.js';
 import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js';
 
 const canvas = document.querySelector('canvas');
@@ -21,7 +21,8 @@ const params = {
   altitudeMin: 0,
   altitudeMax: 20000,
   pointSize: 0.03,
-  live: true
+  live: true,
+  pollInterval: getPollInterval()
 };
 
 const gui = new GUI();
@@ -46,9 +47,13 @@ gui.add(params, 'altitudeMax', 0, 20000).name('Max Alt').onChange(() => {
   setAltitudeFilter(params.altitudeMin, params.altitudeMax);
 });
 
+gui.add(params, 'pollInterval', 1000, 60000, 1000).name('Poll (ms)').onChange(val => {
+  setPollInterval(val);
+});
+
 setAltitudeFilter(params.altitudeMin, params.altitudeMax);
 setPointSize(params.pointSize);
-start();
+setPollInterval(params.pollInterval);
 
 function renderLoop() {
   requestAnimationFrame(renderLoop);

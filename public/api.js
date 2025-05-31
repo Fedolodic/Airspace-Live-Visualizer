@@ -8,6 +8,17 @@ let intervalId = null;
 let pollInterval = 10000;
 let usingSample = false;
 
+// load default interval from env then override with stored preference
+if (typeof process !== 'undefined' && process.env && process.env.POLL_INTERVAL) {
+  const envInt = parseInt(process.env.POLL_INTERVAL, 10);
+  if (!isNaN(envInt)) pollInterval = envInt;
+}
+
+if (typeof localStorage !== 'undefined') {
+  const storedInt = parseInt(localStorage.getItem('pollInterval'), 10);
+  if (!isNaN(storedInt)) pollInterval = storedInt;
+}
+
 /**
  * Register a callback to receive flight data.
  * @param {(data:Array, usingSample:boolean) => void} cb
@@ -57,11 +68,29 @@ async function fetchData() {
   }
 }
 
-export function start(interval = 10000) {
+export function start(interval = pollInterval) {
   pollInterval = interval;
+  if (typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem('pollInterval', String(pollInterval));
+    } catch (e) {
+      /* ignore quota errors */
+    }
+  }
   stop();
   fetchData();
   intervalId = setInterval(fetchData, pollInterval);
+}
+
+export function setPollInterval(interval) {
+  const intVal = parseInt(interval, 10);
+  if (!isNaN(intVal) && intVal > 0) {
+    start(intVal);
+  }
+}
+
+export function getPollInterval() {
+  return pollInterval;
 }
 
 export function stop() {
