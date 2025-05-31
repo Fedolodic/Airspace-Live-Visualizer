@@ -66,7 +66,7 @@ LICENSE
 ## 🎮 Controls & Offline Mode
 
 - Use the panel in the top‑right to toggle **Live** polling, adjust the
-  **Min/Max Alt** filters, and change **Point Size**.
+  **Min/Max Alt** filters, change **Point Size**, and set **Poll Interval**.
 - If the OpenSky API cannot be reached the app automatically loads
   `sample.json` and shows an "Offline demo" banner.
 
@@ -79,7 +79,9 @@ LICENSE
 | `OPENSKY_USERNAME` | Optional | Auth for higher rate limits (OpenSky account) |
 | `OPENSKY_PASSWORD` | Optional | 〃                                             |
 | `MAPBOX_TOKEN`     | Optional | If you swap globe → Mapbox basemap later |
-|
+| `POLL_INTERVAL`    | Optional | Default polling frequency in ms |
+
+Use `POLL_INTERVAL` to set the starting refresh rate for flight data.
 Set `OPENSKY_USERNAME` and `OPENSKY_PASSWORD` in your environment before
 launching the static server if you have an OpenSky account. You can also
 store them as **GitHub Secrets** to keep CI safe:
