@@ -25,8 +25,13 @@ const params = {
 };
 
 const gui = new GUI();
+gui.domElement.setAttribute('role', 'region');
+gui.domElement.setAttribute('aria-label', 'Flight controls');
+gui.domElement.tabIndex = 0;
 
-gui.add(params, 'live').name('Live').onChange(val => {
+const liveCtrl = gui.add(params, 'live').name('Live');
+liveCtrl.domElement.querySelector('input').setAttribute('aria-label', 'Toggle live data');
+liveCtrl.onChange(val => {
   if (val) {
     start();
   } else {
@@ -34,15 +39,21 @@ gui.add(params, 'live').name('Live').onChange(val => {
   }
 });
 
-gui.add(params, 'pointSize', 0.01, 1).name('Point Size').onChange(value => {
+const sizeCtrl = gui.add(params, 'pointSize', 0.01, 1).name('Point Size');
+sizeCtrl.domElement.querySelector('input').setAttribute('aria-label', 'Adjust point size');
+sizeCtrl.onChange(value => {
   setPointSize(value);
 });
 
-gui.add(params, 'altitudeMin', 0, 20000).name('Min Alt').onChange(() => {
+const minCtrl = gui.add(params, 'altitudeMin', 0, 20000).name('Min Alt');
+minCtrl.domElement.querySelector('input').setAttribute('aria-label', 'Minimum altitude filter');
+minCtrl.onChange(() => {
   setAltitudeFilter(params.altitudeMin, params.altitudeMax);
 });
 
-gui.add(params, 'altitudeMax', 0, 20000).name('Max Alt').onChange(() => {
+const maxCtrl = gui.add(params, 'altitudeMax', 0, 20000).name('Max Alt');
+maxCtrl.domElement.querySelector('input').setAttribute('aria-label', 'Maximum altitude filter');
+maxCtrl.onChange(() => {
   setAltitudeFilter(params.altitudeMin, params.altitudeMax);
 });
 
