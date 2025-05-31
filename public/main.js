@@ -1,5 +1,6 @@
 import { initGlobe, updateFlights, setPointSize, setAltitudeFilter, render } from './globe.js';
 import { start, stop, onData } from './api.js';
+import { validateFlights } from './validate.js';
 import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js';
 
 const canvas = document.querySelector('canvas');
@@ -8,8 +9,9 @@ initGlobe(canvas);
 const prevPositions = new Map();
 
 onData(data => {
-  updateFlights(data);
-  for (const f of data) {
+  const clean = validateFlights(data);
+  updateFlights(clean);
+  for (const f of clean) {
     const lon = f[5];
     const lat = f[6];
     const alt = f[7] ?? f[13] ?? 0;
