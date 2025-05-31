@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "outDir": "public",
+    "baseUrl": ".",
+    "paths": {
+      "three": ["src/stubs/three"],
+      "d3": ["src/stubs/d3"],
+      "dat.gui": ["src/stubs/dat_gui"]
+    },
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/stubs"]
+}

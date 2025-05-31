@@ -56,6 +56,7 @@ LICENSE
    git clone https://github.com/<your‑user>/airspace-live-visualizer.git
    cd airspace-live-visualizer
    # optional: export OPENSKY_USERNAME=foo OPENSKY_PASSWORD=bar
+   tsc                 # compile TypeScript → public/
    npx serve public -l 8000   # or: python -m http.server 8000 -d public
    ```
 
