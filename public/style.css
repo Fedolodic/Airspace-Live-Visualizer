@@ -15,6 +15,8 @@ body {
   display: block;
   width: 100vw;
   height: 100vh;
+  /* allow three.js controls to handle gestures */
+  touch-action: none;
 }
 
 #sample-banner {
@@ -42,4 +44,21 @@ body {
   color: #fff;
   font-size: 12px;
   border-radius: 2px;
+}
+
+/* improve usability on touch devices */
+.dg {
+  touch-action: manipulation;
+}
+
+@media (max-width: 600px) {
+  #sample-banner {
+    font-size: 0.8em;
+    padding: 2px 6px;
+  }
+
+  .dg {
+    width: 90vw;
+    max-width: none;
+  }
 }
