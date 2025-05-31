@@ -79,6 +79,7 @@ LICENSE
 | `OPENSKY_USERNAME` | Optional | Auth for higher rate limits (OpenSky account) |
 | `OPENSKY_PASSWORD` | Optional | 〃                                             |
 | `MAPBOX_TOKEN`     | Optional | If you swap globe → Mapbox basemap later |
+| `SENTRY_DSN`       | Optional | Enable error reporting via Sentry         |
 |
 Set `OPENSKY_USERNAME` and `OPENSKY_PASSWORD` in your environment before
 launching the static server if you have an OpenSky account. You can also
