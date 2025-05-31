@@ -1,6 +1,9 @@
 import { initGlobe, updateFlights, setPointSize, setAltitudeFilter, render } from './globe.js';
 import { start, stop, onData } from './api.js';
+import { init as initLogger, log } from './logger.js';
 import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js';
+
+initLogger({ dsn: window.SENTRY_DSN });
 
 const canvas = document.querySelector('canvas');
 initGlobe(canvas);
@@ -28,8 +31,10 @@ const gui = new GUI();
 
 gui.add(params, 'live').name('Live').onChange(val => {
   if (val) {
+    log('Polling started');
     start();
   } else {
+    log('Polling stopped');
     stop();
   }
 });
@@ -48,6 +53,7 @@ gui.add(params, 'altitudeMax', 0, 20000).name('Max Alt').onChange(() => {
 
 setAltitudeFilter(params.altitudeMin, params.altitudeMax);
 setPointSize(params.pointSize);
+log('Visualizer initialised');
 start();
 
 function renderLoop() {
