@@ -4,6 +4,11 @@
   "description": "Airspace Live Visualizer",
   "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
     "test": "echo \"No test specified\" && exit 0"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
   }
 }
