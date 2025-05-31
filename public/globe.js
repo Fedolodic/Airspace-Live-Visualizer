@@ -3,7 +3,7 @@
 
 import * as THREE from 'three';
 import * as d3 from 'd3';
-import { EARTH_RADIUS, latLonAltToVector3, interpolateGreatCircle } from './utils.js';
+import { EARTH_RADIUS, latLonAltToVector3 } from './utils.js';
 
 // Constants
 const EARTH_SEGMENTS = 64;
@@ -23,9 +23,14 @@ let pointer = new THREE.Vector2();
 let raycaster = new THREE.Raycaster();
 
 let altitudeRange = [0, Infinity];
+const worker = new Worker("flightWorker.js", { type: "module" });
+worker.onmessage = (e) => {
+  const { flights, paths } = e.data;
+  buildMeshes(flights, paths);
+};
+
 let pointSize = TUBE_RADIUS;
 let flightInfos = [];
-let prevPositions = new Map();
 
 /**
  * Initialises the globe scene on the provided canvas element.
@@ -125,7 +130,10 @@ export function setAltitudeFilter(min, max) {
  * @param {Array<Array>} flights Raw OpenSky `states` arrays.
  */
 export function updateFlights(flights) {
-  // clear previous geometry
+  worker.postMessage({ type: 'calc', flights, altitudeRange });
+}
+
+function buildMeshes(validFlights, paths) {
   arcGroup.clear();
   if (planeMesh) {
     scene.remove(planeMesh);
@@ -134,24 +142,6 @@ export function updateFlights(flights) {
     planeMesh = null;
   }
   flightInfos = [];
-
-  const validFlights = [];
-  for (const f of flights) {
-    // Extract lat/lon/alt according to OpenSky format (0-indexed)
-    const lon = f[5];
-    const lat = f[6];
-    const alt = f[7] ?? f[13] ?? 0;
-    if (lon == null || lat == null || alt == null) continue;
-    if (alt < altitudeRange[0] || alt > altitudeRange[1]) continue;
-
-    validFlights.push({
-      icao24: f[0],
-      callsign: f[1] ? f[1].trim() : '',
-      lon,
-      lat,
-      alt
-    });
-  }
 
   const colorScale = d3.scaleSequential(d3.interpolateViridis)
     .domain(altitudeRange);
@@ -163,14 +153,13 @@ export function updateFlights(flights) {
   planeMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
   scene.add(planeMesh);
 
-  let i = 0;
-  for (const info of validFlights) {
-    const prev = prevPositions.get(info.icao24) ?? info;
-    const interp = interpolateGreatCircle(prev, info);
+  const dummy = new THREE.Object3D();
+  for (let i = 0; i < validFlights.length; i++) {
+    const info = validFlights[i];
+    const arr = paths[i];
     const pts = [];
-    for (let s = 0; s <= ARC_SEGMENTS; s++) {
-      const pos = interp(s / ARC_SEGMENTS);
-      pts.push(latLonAltToVector3(pos.lat, pos.lon, pos.alt));
+    for (let j = 0; j < arr.length; j += 3) {
+      pts.push(new THREE.Vector3(arr[j], arr[j + 1], arr[j + 2]));
     }
     const curve = new THREE.CatmullRomCurve3(pts);
     const geom = new THREE.TubeGeometry(curve, ARC_SEGMENTS, pointSize, RADIAL_SEGMENTS, false);
@@ -178,17 +167,12 @@ export function updateFlights(flights) {
     const mesh = new THREE.Mesh(geom, mat);
     arcGroup.add(mesh);
 
-    // plane instance at end of path
     const endVec = pts[pts.length - 1];
-    const dummy = new THREE.Object3D();
     dummy.position.copy(endVec);
     dummy.lookAt(camera.position);
     dummy.updateMatrix();
     planeMesh.setMatrixAt(i, dummy.matrix);
     flightInfos[i] = info;
-    i += 1;
-
-    prevPositions.set(info.icao24, info);
   }
   planeMesh.instanceMatrix.needsUpdate = true;
 }

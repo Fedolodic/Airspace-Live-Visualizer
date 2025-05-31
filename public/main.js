@@ -5,16 +5,8 @@ import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.mo
 const canvas = document.querySelector('canvas');
 initGlobe(canvas);
 
-const prevPositions = new Map();
-
 onData(data => {
   updateFlights(data);
-  for (const f of data) {
-    const lon = f[5];
-    const lat = f[6];
-    const alt = f[7] ?? f[13] ?? 0;
-    prevPositions.set(f[0], { lon, lat, alt });
-  }
 });
 
 const params = {
