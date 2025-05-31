@@ -61,6 +61,8 @@ LICENSE
 
 2. Open **[http://localhost:8000](http://localhost:8000)** in your browser → flights should animate within \~5 s.
 
+3. When serving `public/index.html` for production, set HTTP headers like `Content-Security-Policy` to restrict sources and `X-Frame-Options: DENY` to prevent clickjacking.
+
 ---
 
 ## 🎮 Controls & Offline Mode
