@@ -1,20 +1,22 @@
-# Public Folder
+# Public Demo
 
-This directory contains the static client for **Airspace Live Visualizer**.
+This folder hosts the main demo for **Airspace Live Visualizer**.
 
 ## Contents
-- `index.html` – entry page using vanilla ES modules.
-- `style.css` – base styles.
-- `main.js` – app bootstrap and loop.
-- `api.js` – fetches flight data.
-- `globe.js` – builds the Three.js scene.
-- `utils.js` – common helpers.
-- `sample.json` – offline demo data.
-- `assets/` – images and other media.
+- `index.html` – entry page using ES modules
+- `style.css` – base styles
+- `main.js` – app bootstrap and loop
+- `api.js` – flight data fetch
+- `globe.js` – builds the Three.js scene
+- `utils.js` – helpers
+- `sample.json` – offline demo
+- `assets/` – media files
+
+## Prerequisites
+Node.js (for `npx serve`) or Python 3 (for `python -m http.server`).
 
 ## Running
-Serve this folder with any static server so `index.html` can load modules.
-Example:
+Serve this folder so `index.html` can load modules.
 
 ```bash
 npx serve . -l 8000
@@ -22,7 +24,7 @@ npx serve . -l 8000
 python -m http.server 8000
 ```
 
-Then open [http://localhost:8000](http://localhost:8000) in your browser.
+Then open [http://localhost:8000](http://localhost:8000).
 
 ---
 Author: David Martinez
