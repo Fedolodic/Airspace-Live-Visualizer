@@ -4,8 +4,10 @@ const API_URL = 'https://opensky-network.org/api/states/all';
 const SAMPLE_URL = 'sample.json';
 
 let callbacks = [];
-let intervalId = null;
-let pollInterval = 10000;
+let timeoutId = null;
+let baseInterval = 10000;
+let currentInterval = baseInterval;
+const MAX_INTERVAL = 60000;
 let usingSample = false;
 
 /**
@@ -39,6 +41,8 @@ async function fetchData() {
     const states = Array.isArray(json.states) ? json.states : [];
     const filtered = states.filter(s => s[5] != null && s[6] != null).slice(0, 5000);
     notify(filtered);
+    currentInterval = baseInterval;
+    scheduleNext();
     return;
   } catch (err) {
     // fall back to sample data on failure
@@ -52,29 +56,36 @@ async function fetchData() {
     const states = Array.isArray(json.states) ? json.states : [];
     const filtered = states.filter(s => s[5] != null && s[6] != null);
     notify(filtered);
+    currentInterval = Math.min(currentInterval * 2, MAX_INTERVAL);
   } catch (err) {
     console.error('Failed to load sample data', err);
   }
+  scheduleNext();
+}
+
+function scheduleNext() {
+  if (timeoutId) clearTimeout(timeoutId);
+  timeoutId = setTimeout(fetchData, currentInterval);
 }
 
 export function start(interval = 10000) {
-  pollInterval = interval;
+  baseInterval = interval;
+  currentInterval = baseInterval;
   stop();
   fetchData();
-  intervalId = setInterval(fetchData, pollInterval);
 }
 
 export function stop() {
-  if (intervalId) {
-    clearInterval(intervalId);
-    intervalId = null;
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+    timeoutId = null;
   }
 }
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     stop();
-  } else if (!intervalId) {
-    start(pollInterval);
+  } else if (!timeoutId) {
+    start(baseInterval);
   }
 });
