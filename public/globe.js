@@ -18,6 +18,7 @@ let camera;
 let earth;
 let arcGroup;
 let planeMesh;
+let planeTexture;
 let tooltip;
 let pointer = new THREE.Vector2();
 let raycaster = new THREE.Raycaster();
@@ -55,6 +56,8 @@ export function initGlobe(canvas) {
 
   arcGroup = new THREE.Group();
   scene.add(arcGroup);
+
+  planeTexture = new THREE.TextureLoader().load('assets/plane.svg');
 
   // Tooltip element
   tooltip = document.createElement('div');
@@ -126,10 +129,17 @@ export function setAltitudeFilter(min, max) {
  */
 export function updateFlights(flights) {
   // clear previous geometry
+  for (const mesh of arcGroup.children) {
+    mesh.geometry.dispose();
+    mesh.material.dispose();
+  }
   arcGroup.clear();
   if (planeMesh) {
     scene.remove(planeMesh);
     planeMesh.geometry.dispose();
+    if (planeMesh.material.map && planeMesh.material.map !== planeTexture) {
+      planeMesh.material.map.dispose();
+    }
     planeMesh.material.dispose();
     planeMesh = null;
   }
@@ -156,7 +166,6 @@ export function updateFlights(flights) {
   const colorScale = d3.scaleSequential(d3.interpolateViridis)
     .domain(altitudeRange);
 
-  const planeTexture = new THREE.TextureLoader().load('assets/plane.svg');
   const planeGeom = new THREE.PlaneGeometry(PLANE_SIZE, PLANE_SIZE);
   const planeMat = new THREE.MeshBasicMaterial({ map: planeTexture, transparent: true });
   planeMesh = new THREE.InstancedMesh(planeGeom, planeMat, validFlights.length);
