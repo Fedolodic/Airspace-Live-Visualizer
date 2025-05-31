@@ -8,7 +8,7 @@ A real‑time, interactive **3‑D globe** that plots commercial flights fetched
 
 | Capability                      | Notes                                                                                                |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| **Live data**                   | Pulls [`/api/states/all`](https://opensky-network.org/apidoc/rest.html) every 10 s (rate‑limit safe) |
+| **Live data**                   | Polls [`/api/states/all`](https://opensky-network.org/apidoc/rest.html) ~10 s, auto‑adjusts to rate‑limit headers |
 | **3‑D Globe**                   | `three.js` scene with a high‑res Earth texture + atmosphere shader                                   |
 | **Great‑circle interpolation**  | `d3-geo` → smooth, geodesic splines between samples                                                  |
 | **Altitude extrusion & colour** | Arc height ≈ `baro_altitude (m) / 10`; colour scale = `d3.scaleSequential(d3.interpolateViridis)`    |
