@@ -1,54 +1,78 @@
 import { initGlobe, updateFlights, setPointSize, setAltitudeFilter, render } from './globe.js';
 import { start, stop, onData } from './api.js';
 import { GUI } from 'https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js';
+import { store } from './store.js';
 
 const canvas = document.querySelector('canvas');
 initGlobe(canvas);
 
-const prevPositions = new Map();
-
-onData(data => {
-  updateFlights(data);
-  for (const f of data) {
-    const lon = f[5];
-    const lat = f[6];
-    const alt = f[7] ?? f[13] ?? 0;
-    prevPositions.set(f[0], { lon, lat, alt });
-  }
+onData((data, usingSample) => {
+  store.setState({ flights: data, usingSample });
 });
 
-const params = {
-  altitudeMin: 0,
-  altitudeMax: 20000,
-  pointSize: 0.03,
-  live: true
-};
+const params = { ...store.getState().settings };
 
 const gui = new GUI();
 
 gui.add(params, 'live').name('Live').onChange(val => {
-  if (val) {
-    start();
-  } else {
-    stop();
-  }
+  store.setState({ settings: { ...store.getState().settings, live: val } });
 });
 
 gui.add(params, 'pointSize', 0.01, 1).name('Point Size').onChange(value => {
-  setPointSize(value);
+  store.setState({ settings: { ...store.getState().settings, pointSize: value } });
 });
 
 gui.add(params, 'altitudeMin', 0, 20000).name('Min Alt').onChange(() => {
-  setAltitudeFilter(params.altitudeMin, params.altitudeMax);
+  store.setState({ settings: {
+    ...store.getState().settings,
+    altitudeMin: params.altitudeMin,
+    altitudeMax: params.altitudeMax
+  }});
 });
 
 gui.add(params, 'altitudeMax', 0, 20000).name('Max Alt').onChange(() => {
-  setAltitudeFilter(params.altitudeMin, params.altitudeMax);
+  store.setState({ settings: {
+    ...store.getState().settings,
+    altitudeMin: params.altitudeMin,
+    altitudeMax: params.altitudeMax
+  }});
 });
 
 setAltitudeFilter(params.altitudeMin, params.altitudeMax);
 setPointSize(params.pointSize);
-start();
+if (params.live) start();
+
+let prevState = store.getState();
+store.subscribe(state => {
+  if (state.flights !== prevState.flights) {
+    updateFlights(state.flights);
+  }
+
+  const prevSettings = prevState.settings;
+  const settings = state.settings;
+
+  if (settings.pointSize !== prevSettings.pointSize) {
+    setPointSize(settings.pointSize);
+  }
+
+  if (
+    settings.altitudeMin !== prevSettings.altitudeMin ||
+    settings.altitudeMax !== prevSettings.altitudeMax
+  ) {
+    setAltitudeFilter(settings.altitudeMin, settings.altitudeMax);
+  }
+
+  if (settings.live !== prevSettings.live) {
+    settings.live ? start() : stop();
+  }
+
+  const banner = document.getElementById('sample-banner');
+  if (banner) {
+    banner.classList.toggle('hidden', !state.usingSample);
+  }
+
+  prevState = state;
+});
 
 function renderLoop() {
   requestAnimationFrame(renderLoop);
