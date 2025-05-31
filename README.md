@@ -95,6 +95,8 @@ pnpm install         # add eslint, prettier, jest as devDeps
 pnpm run dev         # (optional) vite dev server if you migrate to a build
 ```
 
+Dev mode can be toggled by appending `?dev` to the URL; this displays real-time FPS and update timings.
+
 ### Lint & Test (optional)
 
 ```bash
