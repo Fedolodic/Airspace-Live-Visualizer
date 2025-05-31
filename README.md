@@ -15,6 +15,7 @@ A real‑time, interactive **3‑D globe** that plots commercial flights fetched
 | **Instanced billboards**        | `THREE.InstancedMesh` keeps GPU draw‑calls low (≤ 2 × flightCount)                                   |
 | **Control panel**               | Altitude filter, play/pause, point‑size slider via `dat.GUI`                                         |
 | **Offline demo**                | `sample.json` snapshot loads automatically if the API is unreachable                                 |
+| **Service worker cache**        | Caches assets and API responses for smoother offline use                                            |
 
 ---
 

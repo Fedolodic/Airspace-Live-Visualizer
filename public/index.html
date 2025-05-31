@@ -19,5 +19,12 @@
   <div id="sample-banner" class="hidden">Offline demo &ndash; using sample data</div>
   <canvas id="globe"></canvas>
   <script type="module" src="main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
+  </script>
 </body>
 </html>
