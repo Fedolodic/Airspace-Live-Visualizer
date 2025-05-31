@@ -17,12 +17,35 @@ onData(data => {
   }
 });
 
-const params = {
+const STORAGE_KEY = 'alvGuiParams';
+const defaults = {
   altitudeMin: 0,
   altitudeMax: 20000,
   pointSize: 0.03,
   live: true
 };
+
+function loadParams() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved && typeof saved === 'object') {
+      return { ...defaults, ...saved };
+    }
+  } catch (err) {
+    console.error('Failed to parse saved GUI params', err);
+  }
+  return { ...defaults };
+}
+
+function saveParams() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(params));
+  } catch (_) {
+    // ignore write errors
+  }
+}
+
+const params = loadParams();
 
 const gui = new GUI();
 
@@ -32,23 +55,30 @@ gui.add(params, 'live').name('Live').onChange(val => {
   } else {
     stop();
   }
+  saveParams();
 });
 
 gui.add(params, 'pointSize', 0.01, 1).name('Point Size').onChange(value => {
   setPointSize(value);
+  saveParams();
 });
 
 gui.add(params, 'altitudeMin', 0, 20000).name('Min Alt').onChange(() => {
   setAltitudeFilter(params.altitudeMin, params.altitudeMax);
+  saveParams();
 });
 
 gui.add(params, 'altitudeMax', 0, 20000).name('Max Alt').onChange(() => {
   setAltitudeFilter(params.altitudeMin, params.altitudeMax);
+  saveParams();
 });
 
 setAltitudeFilter(params.altitudeMin, params.altitudeMax);
 setPointSize(params.pointSize);
-start();
+
+if (params.live) {
+  start();
+}
 
 function renderLoop() {
   requestAnimationFrame(renderLoop);
